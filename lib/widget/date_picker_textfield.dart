@@ -13,10 +13,27 @@ class DatePickerTextField extends StatefulWidget {
       this.validator,
       required this.initialDate,
       this.startYear,
-      this.endYear});
+      this.endYear,
+      this.focusColor,
+      this.hoverColor,
+      this.splashColor,
+      this.highlightColor,
+      this.unselectedForegroundColor,
+      this.selectedForegroundColor,
+      this.unselectedBackgroundColor,
+      this.selectedBackgroundColor});
   final TextEditingController dateCtrl;
   final Color? activeColor;
   final Color? fillColor;
+
+  final Color? focusColor;
+  final Color? hoverColor;
+  final Color? splashColor;
+  final Color? highlightColor;
+  final Color? unselectedForegroundColor;
+  final Color? selectedForegroundColor;
+  final Color? unselectedBackgroundColor;
+  final Color? selectedBackgroundColor;
   final DateTime initialDate;
   final DateTime? startYear;
   final DateTime? endYear;
@@ -45,7 +62,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
           controller: dateCtrl,
           inputFormatters: [dateMask],
           validator: widget.validator,
-          cursorColor: Colors.black,
+          cursorColor: widget.activeColor ?? Colors.black,
           decoration: InputDecoration(
             hintText: "dd/mm/yyyy",
             enabledBorder: const OutlineInputBorder(
@@ -108,6 +125,15 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
                     },
                   );
                 },
+                activeColor: widget.activeColor,
+                focusColor: widget.focusColor,
+                hoverColor: widget.hoverColor,
+                highlightColor: widget.highlightColor,
+                unselectedBackgroundColor: widget.unselectedBackgroundColor,
+                unselectedForegroundColor: widget.unselectedForegroundColor,
+                selectedBackgroundColor: widget.selectedBackgroundColor,
+                selectedForegroundColor: widget.selectedForegroundColor,
+                splashColor: widget.splashColor,
               ),
             ),
           ),

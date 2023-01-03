@@ -12,13 +12,32 @@ class CustomDatePicker extends StatefulWidget {
       this.endYear,
       required this.cancel,
       required this.ok,
-      required this.widgetWidth});
+      required this.widgetWidth,
+      this.activeColor,
+      this.focusColor,
+      this.hoverColor,
+      this.splashColor,
+      this.highlightColor,
+      this.unselectedForegroundColor,
+      this.selectedForegroundColor,
+      this.unselectedBackgroundColor,
+      this.selectedBackgroundColor});
   final DateTime initialDate;
   final DateTime? startYear;
   final DateTime? endYear;
   final Function cancel;
   final Function(DateTime? returnedDate) ok;
   final double widgetWidth;
+  final Color? activeColor;
+  final Color? focusColor;
+  final Color? hoverColor;
+  final Color? splashColor;
+  final Color? highlightColor;
+  final Color? unselectedForegroundColor;
+  final Color? selectedForegroundColor;
+  final Color? unselectedBackgroundColor;
+  final Color? selectedBackgroundColor;
+
   @override
   State<CustomDatePicker> createState() => _CustomDatePickerState();
 }
@@ -107,11 +126,13 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              color: daySelectorActive ? Colors.black : Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+              color: daySelectorActive
+                  ? widget.activeColor ?? Colors.black
+                  : Colors.transparent,
+              focusColor: widget.focusColor ?? Colors.transparent,
+              hoverColor: widget.hoverColor ?? Colors.transparent,
+              splashColor: widget.splashColor ?? Colors.transparent,
+              highlightColor: widget.highlightColor ?? Colors.transparent,
               constraints: const BoxConstraints(),
               onPressed: () {
                 if (!daySelectorActive) return;
@@ -121,10 +142,15 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                   selectMonth(decrement: true);
                 }
               },
-              icon: const Icon(Icons.chevron_left),
+              icon: Icon(
+                Icons.chevron_left,
+                color: widget.unselectedForegroundColor ?? Colors.black,
+              ),
             ),
             TextButton(
-              style: TextButton.styleFrom(foregroundColor: Colors.black),
+              style: TextButton.styleFrom(
+                  foregroundColor:
+                      widget.unselectedForegroundColor ?? Colors.black),
               onPressed: () {
                 if (isYear) {
                   if (scrollController.hasClients) {
@@ -157,19 +183,25 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                     isYear
                         ? '$selectedYear'
                         : DateFormat('MMM').format(months[selectedMonth]),
+                    style: TextStyle(
+                      color: widget.unselectedForegroundColor ?? Colors.black,
+                    ),
                   ),
-                  const Icon(
+                  Icon(
                     Icons.arrow_drop_down,
+                    color: widget.unselectedForegroundColor ?? Colors.black,
                   ),
                 ],
               ),
             ),
             IconButton(
-              color: daySelectorActive ? Colors.black : Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+              color: daySelectorActive
+                  ? widget.activeColor ?? Colors.black
+                  : Colors.transparent,
+              focusColor: widget.focusColor ?? Colors.transparent,
+              hoverColor: widget.hoverColor ?? Colors.transparent,
+              splashColor: widget.splashColor ?? Colors.transparent,
+              highlightColor: widget.highlightColor ?? Colors.transparent,
               constraints: const BoxConstraints(),
               onPressed: () {
                 if (!daySelectorActive) return;
@@ -180,7 +212,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                   selectMonth(increment: true);
                 }
               },
-              icon: const Icon(Icons.chevron_right),
+              icon: Icon(
+                Icons.chevron_right,
+                color: widget.unselectedForegroundColor ?? Colors.black,
+              ),
             ),
           ],
         ),
@@ -262,9 +297,9 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
             children: [
               const SizedBox(width: 15),
               selectedYear == index + startYear
-                  ? const Icon(
+                  ? Icon(
                       Icons.check,
-                      color: Colors.black,
+                      color: widget.selectedForegroundColor ?? Colors.black,
                       size: 30,
                     )
                   : const SizedBox(
@@ -333,9 +368,9 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
             children: [
               const SizedBox(width: 15),
               selectedMonth == index
-                  ? const Icon(
+                  ? Icon(
                       Icons.check,
-                      color: Colors.black,
+                      color: widget.selectedForegroundColor ?? Colors.black,
                       size: 30,
                     )
                   : const SizedBox(
@@ -395,8 +430,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
             itemBuilder: (context, index) {
               return FittedBox(
                 child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
+                  backgroundColor:
+                      widget.unselectedBackgroundColor ?? Colors.white,
+                  foregroundColor:
+                      widget.unselectedForegroundColor ?? Colors.black,
                   child: Center(
                     child: Text(
                       days[index],
@@ -426,9 +463,9 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                   iDate.isAfter(lastDateOfMonth)) {
                 fgColor = const Color.fromRGBO(104, 104, 104, 0.7);
               } else if (selectedDay == iDate.day) {
-                fgColor = Colors.white;
+                fgColor = widget.selectedForegroundColor ?? Colors.white;
               } else {
-                fgColor = Colors.black;
+                fgColor = widget.unselectedForegroundColor ?? Colors.black;
               }
 
               Color bgColor = Colors.white;
@@ -436,15 +473,15 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
               if ((!iDate.isBefore(firstOfMonth) &&
                       !iDate.isAfter(lastDateOfMonth)) &&
                   selectedDay == iDate.day) {
-                bgColor = Colors.black;
+                bgColor = widget.selectedBackgroundColor ?? Colors.black;
               }
 
               return FittedBox(
                 child: InkWell(
-                  splashColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
+                  splashColor: widget.splashColor ?? Colors.transparent,
+                  focusColor: widget.focusColor ?? Colors.transparent,
+                  highlightColor: widget.highlightColor ?? Colors.transparent,
+                  hoverColor: widget.hoverColor ?? Colors.transparent,
                   onTap: () {
                     if (iDate.isBefore(firstOfMonth) ||
                         iDate.isAfter(lastDateOfMonth)) return;
@@ -477,11 +514,11 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                     onPressed: () {
                       widget.cancel();
                     },
-                    child: const Text(
+                    child: Text(
                       "Cancel",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: widget.unselectedForegroundColor ?? Colors.black,
                       ),
                     ),
                   ),
@@ -498,11 +535,11 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                         DateTime(selectedYear, selectedMonth + 1, selectedDay!),
                       );
                     },
-                    child: const Text(
+                    child: Text(
                       "OK",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: widget.unselectedForegroundColor ?? Colors.black,
                       ),
                     ),
                   ),
